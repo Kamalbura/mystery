@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Fun Zone</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1 class="title">Ultimate Fun Zone</h1>
+        <p class="subtitle">The funniest website on the internet!</p>
+    </header>
+
+    <main>
+        <section class="fun-section" id="meme-generator">
+            <h2>Meme Generator</h2>
+            <div class="meme-container">
+                <div class="meme-display" id="meme-display">
+                    <img id="meme-image" src="https://via.placeholder.com/400x300" alt="Meme template">
+                    <div class="meme-text top-text" id="top-text-display">TOP TEXT</div>
+                    <div class="meme-text bottom-text" id="bottom-text-display">BOTTOM TEXT</div>
+                </div>
+                <div class="meme-controls">
+                    <select id="meme-template">
+                        <option value="https://i.imgflip.com/30b1gx.jpg">Drake Hotline Bling</option>
+                        <option value="https://i.imgflip.com/1g8my4.jpg">Two Buttons</option>
+                        <option value="https://i.imgflip.com/1bij.jpg">One Does Not Simply</option>
+                        <option value="https://i.imgflip.com/gtj5t.jpg">Oprah You Get A</option>
+                        <option value="https://i.imgflip.com/9ehk.jpg">Bad Luck Brian</option>
+                    </select>
+                    <input type="text" id="top-text-input" placeholder="Top Text">
+                    <input type="text" id="bottom-text-input" placeholder="Bottom Text">
+                    <button id="generate-meme">Generate Meme</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="fun-section" id="joke-generator">
+            <h2>Random Joke Generator</h2>
+            <div class="joke-container">
+                <div id="joke-text" class="joke-text">Click the button to get a joke!</div>
+                <button id="get-joke">Get Another Joke</button>
+            </div>
+        </section>
+
+        <section class="fun-section" id="fun-facts">
+            <h2>Weird Fun Facts</h2>
+            <div class="fact-container">
+                <div id="fact-text" class="fact-text">Click for a random weird fact!</div>
+                <button id="get-fact">Next Fact</button>
+            </div>
+        </section>
+
+        <section class="fun-section" id="color-game">
+            <h2>Magic Color Game</h2>
+            <div class="color-container">
+                <div id="color-display" class="color-display"></div>
+                <div class="color-buttons">
+                    <button id="change-color">Change Color</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>Created with ❤️ for my awesome friends and classmates! | &copy; <span id="current-year"></span></p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

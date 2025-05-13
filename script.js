@@ -1,0 +1,230 @@
+// Wait for the DOM to fully load
+document.addEventListener('DOMContentLoaded', () => {
+    // Set current year in footer
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+    
+    // ===== MEME GENERATOR =====
+    const memeTemplate = document.getElementById('meme-template');
+    const topTextInput = document.getElementById('top-text-input');
+    const bottomTextInput = document.getElementById('bottom-text-input');
+    const generateMemeBtn = document.getElementById('generate-meme');
+    const memeImage = document.getElementById('meme-image');
+    const topTextDisplay = document.getElementById('top-text-display');
+    const bottomTextDisplay = document.getElementById('bottom-text-display');
+
+    // Set initial meme image
+    memeImage.src = memeTemplate.value;
+
+    // Generate meme when button is clicked
+    generateMemeBtn.addEventListener('click', () => {
+        memeImage.src = memeTemplate.value;
+        topTextDisplay.textContent = topTextInput.value || 'TOP TEXT';
+        bottomTextDisplay.textContent = bottomTextInput.value || 'BOTTOM TEXT';
+        
+        // Add a fun shake animation
+        memeImage.classList.add('shake');
+        setTimeout(() => memeImage.classList.remove('shake'), 500);
+    });
+
+    // Update meme when template changes
+    memeTemplate.addEventListener('change', () => {
+        memeImage.src = memeTemplate.value;
+    });
+
+    // ===== JOKE GENERATOR =====
+    const getJokeBtn = document.getElementById('get-joke');
+    const jokeText = document.getElementById('joke-text');
+    
+    const jokes = [
+        "Why don't scientists trust atoms? Because they make up everything!",
+        "I told my wife she was drawing her eyebrows too high. She looked surprised.",
+        "What do you call a fake noodle? An impasta!",
+        "Why did the scarecrow win an award? Because he was outstanding in his field!",
+        "I'm reading a book about anti-gravity. It's impossible to put down!",
+        "Did you hear about the mathematician who's afraid of negative numbers? He'll stop at nothing to avoid them!",
+        "Why don't skeletons fight each other? They don't have the guts!",
+        "What do you call a bear with no teeth? A gummy bear!",
+        "What's orange and sounds like a parrot? A carrot!",
+        "How do you organize a space party? You planet!",
+        "Why did the bike fall over? Because it was two-tired!",
+        "What's the best time to go to the dentist? Tooth-hurty!",
+        "Why couldn't the bicycle stand up by itself? It was two tired!",
+        "What do you call a cow with no legs? Ground beef!",
+        "I'm on a seafood diet. Every time I see food, I eat it!",
+        "Why did the golfer bring two pairs of pants? In case he got a hole in one!"
+    ];
+
+    getJokeBtn.addEventListener('click', () => {
+        const randomJoke = jokes[Math.floor(Math.random() * jokes.length)];
+        jokeText.textContent = randomJoke;
+        jokeText.classList.add('pop');
+        setTimeout(() => jokeText.classList.remove('pop'), 300);
+    });
+
+    // ===== FUN FACTS GENERATOR =====
+    const getFactBtn = document.getElementById('get-fact');
+    const factText = document.getElementById('fact-text');
+    
+    const facts = [
+        "Octopuses have three hearts!",
+        "A group of flamingos is called a 'flamboyance'!",
+        "The Hawaiian alphabet has only 13 letters!",
+        "A day on Venus is longer than a year on Venus!",
+        "The fingerprints of koalas are so similar to humans that they have on occasion been confused at crime scenes!",
+        "Cows have best friends and get stressed when they're separated!",
+        "The average person spends 6 months of their life waiting at red lights!",
+        "A single strand of spaghetti is called a 'spaghetto'!",
+        "Honey never spoils! Archaeologists have found pots of honey in ancient Egyptian tombs that are over 3,000 years old and still perfectly good to eat!",
+        "A crocodile cannot stick its tongue out!",
+        "Bananas are berries, but strawberries aren't!",
+        "An ostrich's eye is bigger than its brain!",
+        "Cats can make over 100 vocal sounds, while dogs can only make about 10!",
+        "A jiffy is an actual unit of time: 1/100th of a second!",
+        "The Netherlands is so flat that there's a hill with a height of just 40 meters called 'Mountain of the Netherlands'!"
+    ];
+
+    getFactBtn.addEventListener('click', () => {
+        const randomFact = facts[Math.floor(Math.random() * facts.length)];
+        factText.textContent = randomFact;
+        factText.classList.add('spin');
+        setTimeout(() => factText.classList.remove('spin'), 500);
+    });
+
+    // ===== COLOR GAME =====
+    const changeColorBtn = document.getElementById('change-color');
+    const colorDisplay = document.getElementById('color-display');
+    
+    // Generate a random color
+    function getRandomColor() {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+    // Create a gradient with random colors
+    function setRandomGradient() {
+        const color1 = getRandomColor();
+        const color2 = getRandomColor();
+        const color3 = getRandomColor();
+        const angle = Math.floor(Math.random() * 360);
+        
+        colorDisplay.style.background = `linear-gradient(${angle}deg, ${color1}, ${color2}, ${color3})`;
+        
+        // Add a fun animation
+        colorDisplay.classList.add('pulse');
+        setTimeout(() => colorDisplay.classList.remove('pulse'), 500);
+    }
+
+    // Initial color setting
+    setRandomGradient();
+    
+    // Change color when button is clicked
+    changeColorBtn.addEventListener('click', setRandomGradient);
+
+    // Add CSS animations dynamically
+    const style = document.createElement('style');
+    style.textContent = `
+        .shake {
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+        
+        .pop {
+            animation: pop 0.3s;
+        }
+        
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .spin {
+            animation: spin 0.5s;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .pulse {
+            animation: pulse 0.5s;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Easter egg: Konami code
+    const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+    let konamiIndex = 0;
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === konamiCode[konamiIndex]) {
+            konamiIndex++;
+            if (konamiIndex === konamiCode.length) {
+                activateEasterEgg();
+                konamiIndex = 0;
+            }
+        } else {
+            konamiIndex = 0;
+        }
+    });
+
+    function activateEasterEgg() {
+        // Make the page go crazy for a few seconds
+        document.body.style.animation = 'rainbow-bg 2s infinite';
+        
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes rainbow-bg {
+                0% { background: linear-gradient(45deg, red, orange); }
+                14% { background: linear-gradient(45deg, orange, yellow); }
+                28% { background: linear-gradient(45deg, yellow, green); }
+                42% { background: linear-gradient(45deg, green, blue); }
+                57% { background: linear-gradient(45deg, blue, indigo); }
+                71% { background: linear-gradient(45deg, indigo, violet); }
+                85% { background: linear-gradient(45deg, violet, red); }
+                100% { background: linear-gradient(45deg, red, orange); }
+            }
+            
+            @keyframes spin-element {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Make elements spin
+        const sections = document.querySelectorAll('.fun-section');
+        sections.forEach(section => {
+            section.style.animation = 'spin-element 1s infinite';
+        });
+        
+        // Return to normal after 3 seconds
+        setTimeout(() => {
+            document.body.style.animation = '';
+            sections.forEach(section => {
+                section.style.animation = '';
+            });
+        }, 3000);
+        
+        // Show a message
+        alert('You found the secret Konami code! How cool are you?!');
+    }
+});
