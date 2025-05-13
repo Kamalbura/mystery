@@ -223,8 +223,135 @@ document.addEventListener('DOMContentLoaded', () => {
                 section.style.animation = '';
             });
         }, 3000);
-        
-        // Show a message
+          // Show a message
         alert('You found the secret Konami code! How cool are you?!');
     }
+    
+    // ===== ANNOYING BUTTON =====
+    const runAwayButton = document.getElementById('run-away-button');
+    const annoyingMessage = document.getElementById('annoying-message');
+    
+    runAwayButton.addEventListener('mouseover', () => {
+        // Calculate new position
+        const maxX = window.innerWidth - runAwayButton.clientWidth;
+        const maxY = window.innerHeight - runAwayButton.clientHeight;
+        
+        const newX = Math.floor(Math.random() * maxX);
+        const newY = Math.floor(Math.random() * maxY);
+        
+        // Set new position
+        runAwayButton.style.left = newX + 'px';
+        runAwayButton.style.top = newY + 'px';
+        
+        // Show the message
+        annoyingMessage.classList.remove('hidden');
+        setTimeout(() => annoyingMessage.classList.add('hidden'), 1500);
+    });
+    
+    runAwayButton.addEventListener('click', () => {
+        alert("Wow! You actually caught me! You're either very lucky or very good!");
+    });
+    
+    // ===== ROAST GENERATOR =====
+    const getRoastBtn = document.getElementById('get-roast');
+    const roastText = document.getElementById('roast-text');
+    
+    const roasts = [
+        "You have something on your face... Oh wait, that's just your face.",
+        "If I wanted to kill myself, I'd climb your ego and jump to your IQ.",
+        "You're not completely useless, you can always serve as a bad example.",
+        "I'd agree with you, but then we'd both be wrong.",
+        "Don't be ashamed of who you are. That's your parents' job.",
+        "You're the reason the gene pool needs a lifeguard.",
+        "Your phone battery lasts longer than your relationships.",
+        "I thought of you today. It reminded me to take out the trash.",
+        "You're like a cloud. When you disappear, it's a beautiful day.",
+        "I'd tell you to go outside and play, but don't trees need oxygen?",
+        "You have more issues than a magazine stand.",
+        "Your grades say 'marry rich', but your face says 'study harder'.",
+        "You must have been born on a highway, because that's where most accidents happen.",
+        "I'm jealous of people who don't know you.",
+        "You're not stupid; you just have bad luck thinking."
+    ];
+    
+    getRoastBtn.addEventListener('click', () => {
+        const randomRoast = roasts[Math.floor(Math.random() * roasts.length)];
+        roastText.textContent = randomRoast;
+        roastText.classList.add('pop');
+        setTimeout(() => roastText.classList.remove('pop'), 300);
+    });
+    
+    // ===== FAKE VIRUS ALERT =====
+    const showVirusBtn = document.getElementById('show-virus');
+    const virusAlert = document.getElementById('virus-alert');
+    const closeVirusBtn = document.getElementById('close-virus');
+    const payButton = document.getElementById('pay-button');
+    
+    showVirusBtn.addEventListener('click', () => {
+        virusAlert.classList.remove('hidden');
+    });
+    
+    closeVirusBtn.addEventListener('click', () => {
+        virusAlert.classList.add('hidden');
+    });
+    
+    payButton.addEventListener('click', () => {
+        alert("Transaction successful! Just kidding, this is just a prank website. No actual virus here!");
+        virusAlert.classList.add('hidden');
+    });
+    
+    // ===== GHOST CURSOR =====
+    const toggleCursorBtn = document.getElementById('toggle-cursor');
+    const cursorFollower = document.getElementById('cursor-follower');
+    let ghostCursorActive = false;
+    
+    toggleCursorBtn.addEventListener('click', () => {
+        ghostCursorActive = !ghostCursorActive;
+        
+        if (ghostCursorActive) {
+            document.body.style.cursor = 'none';
+            cursorFollower.style.display = 'block';
+            cursorFollower.innerHTML = randomEmoji();
+            toggleCursorBtn.textContent = "🚫 Normal Cursor";
+        } else {
+            document.body.style.cursor = 'default';
+            cursorFollower.style.display = 'none';
+            toggleCursorBtn.textContent = "👻 Ghost Cursor";
+        }
+    });
+    
+    document.addEventListener('mousemove', (e) => {
+        if (ghostCursorActive) {
+            cursorFollower.style.left = e.clientX + 'px';
+            cursorFollower.style.top = e.clientY + 'px';
+        }
+    });
+    
+    function randomEmoji() {
+        const emojis = ['😂', '🤣', '💩', '👻', '👽', '🤡', '👹', '😱', '🙄', '🤪'];
+        return emojis[Math.floor(Math.random() * emojis.length)];
+    }
+    
+    // ===== SPIN MODE =====
+    const toggleSpinBtn = document.getElementById('toggle-spin');
+    let spinModeActive = false;
+    
+    toggleSpinBtn.addEventListener('click', () => {
+        spinModeActive = !spinModeActive;
+        
+        if (spinModeActive) {
+            document.body.classList.add('spin-mode');
+            toggleSpinBtn.textContent = "🛑 Stop Spinning";
+        } else {
+            document.body.classList.remove('spin-mode');
+            toggleSpinBtn.textContent = "🌀 Spin Mode";
+        }
+    });
+    
+    // Add an occasional random popup after 30-60 seconds of browsing
+    setTimeout(() => {
+        if (Math.random() > 0.5) { // 50% chance
+            alert("CONGRATS! You're the 1,000,000th visitor! You've won... absolutely nothing! 🎉");
+        }
+    }, Math.random() * 30000 + 30000);
 });
