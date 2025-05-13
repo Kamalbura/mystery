@@ -223,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 section.style.animation = '';
             });
         }, 3000);
-          // Show a message
+          // Show a message okeu
         alert('You found the secret Konami code! How cool are you?!');
     }
     
