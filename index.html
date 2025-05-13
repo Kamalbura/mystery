@@ -10,9 +10,25 @@
     <header>
         <h1 class="title">Ultimate Fun Zone</h1>
         <p class="subtitle">The funniest website on the internet!</p>
+        <div class="chaos-controls">
+            <button id="toggle-cursor" class="chaos-button">👻 Ghost Cursor</button>
+            <button id="toggle-spin" class="chaos-button">🌀 Spin Mode</button>
+        </div>
     </header>
 
     <main>
+        <!-- Virus Alert Overlay -->
+        <div id="virus-alert" class="overlay hidden">
+            <div class="virus-box">
+                <h2>⚠️ VIRUS DETECTED! ⚠️</h2>
+                <p>Hacked by your crush. Send 100₹ or I reveal your browsing history.</p>
+                <div class="virus-buttons">
+                    <button id="pay-button">💸 Pay Now</button>
+                    <button id="close-virus">❌ Close</button>
+                </div>
+            </div>
+        </div>
+        
         <section class="fun-section" id="meme-generator">
             <h2>Meme Generator</h2>
             <div class="meme-container">
@@ -33,6 +49,22 @@
                     <input type="text" id="bottom-text-input" placeholder="Bottom Text">
                     <button id="generate-meme">Generate Meme</button>
                 </div>
+            </div>
+        </section>
+
+        <section class="fun-section" id="annoying-button">
+            <h2>Try To Click Me (If You Can)</h2>
+            <div class="annoying-container">
+                <button id="run-away-button">Click Me For A Surprise!</button>
+                <p id="annoying-message" class="hidden">Haha! Too slow! Try again!</p>
+            </div>
+        </section>
+
+        <section class="fun-section" id="roast-generator">
+            <h2>Random Roast Generator</h2>
+            <div class="roast-container">
+                <div id="roast-text" class="roast-text">Click for a savage roast!</div>
+                <button id="get-roast">Roast Me</button>
             </div>
         </section>
 
@@ -61,7 +93,11 @@
                 </div>
             </div>
         </section>
+        
+        <button id="show-virus" class="fake-virus-button">DO NOT CLICK THIS BUTTON</button>
     </main>
+
+    <div id="cursor-follower"></div>
 
     <footer>
         <p>Created with ❤️ for my awesome friends and classmates! | &copy; <span id="current-year"></span></p>
