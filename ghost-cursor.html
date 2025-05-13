@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghost Cursor Chaos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #222;
+            color: #fff;
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: none;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            color: #ff00ff;
+            text-shadow: 0 0 10px #ff00ff;
+        }
+        
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .cursor-playground {
+            width: 100%;
+            height: 300px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .target {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: #ff00ff;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+        
+        .target:hover {
+            background-color: #00ff00;
+        }
+        
+        .controls {
+            margin-top: 20px;
+        }
+        
+        button {
+            background-color: #ff00ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            margin: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+        }
+        
+        button:hover {
+            background-color: #cc00cc;
+            transform: scale(1.1);
+        }
+        
+        #score-display {
+            font-size: 2rem;
+            margin: 20px 0;
+            color: #ff00ff;
+        }
+        
+        #time-display {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #00ffff;
+        }
+        
+        #cursor-follower {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 9999;
+            font-size: 30px;
+            transform: translate(-50%, -50%);
+        }
+        
+        .ghost-trail {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0.5;
+            z-index: 100;
+        }
+        
+        a.back-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: #fff;
+            text-decoration: none;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px 15px;
+            border-radius: 5px;
+            border: 1px solid #fff;
+            cursor: pointer;
+        }
+        
+        a.back-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">← Back to Fun Zone</a>
+    
+    <header>
+        <h1>👻 Ghost Cursor Challenge 👻</h1>
+        <p>Try to click the targets with your ghost cursor!</p>
+    </header>
+    
+    <div class="container">
+        <div id="time-display">Time: 30s</div>
+        <div id="score-display">Score: 0</div>
+        
+        <div class="cursor-playground" id="playground">
+            <!-- Targets will be added here via JS -->
+        </div>
+        
+        <div class="controls">
+            <button id="start-game">Start Game</button>
+            <button id="change-cursor">Change Cursor</button>
+        </div>
+        
+        <p>Tip: The targets will move randomly and your cursor is a ghost! Good luck!</p>
+    </div>
+    
+    <div id="cursor-follower">👻</div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get DOM elements
+            const playground = document.getElementById('playground');
+            const startBtn = document.getElementById('start-game');
+            const changeCursorBtn = document.getElementById('change-cursor');
+            const scoreDisplay = document.getElementById('score-display');
+            const timeDisplay = document.getElementById('time-display');
+            const cursorFollower = document.getElementById('cursor-follower');
+            
+            // Game variables
+            let score = 0;
+            let timeLeft = 30;
+            let gameActive = false;
+            let gameTimer;
+            let targets = [];
+            
+            // Array of emojis for the cursor
+            const cursorEmojis = ['👻', '💀', '👽', '🤡', '👹', '👺', '👾', '🤖', '💩', '🙈', '🦄', '🐉'];
+            
+            // Update cursor position
+            document.addEventListener('mousemove', (e) => {
+                cursorFollower.style.left = e.clientX + 'px';
+                cursorFollower.style.top = e.clientY + 'px';
+                
+                // Add ghost trail effect
+                if (Math.random() > 0.7) {
+                    createGhostTrail(e.clientX, e.clientY);
+                }
+            });
+            
+            // Change cursor emoji
+            changeCursorBtn.addEventListener('click', () => {
+                const randomEmoji = cursorEmojis[Math.floor(Math.random() * cursorEmojis.length)];
+                cursorFollower.textContent = randomEmoji;
+            });
+            
+            // Create ghost trail effect
+            function createGhostTrail(x, y) {
+                const trail = document.createElement('div');
+                trail.className = 'ghost-trail';
+                trail.style.left = x + 'px';
+                trail.style.top = y + 'px';
+                trail.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 70%)`;
+                document.body.appendChild(trail);
+                
+                // Animate and remove
+                let opacity = 0.5;
+                const fadeInterval = setInterval(() => {
+                    opacity -= 0.05;
+                    trail.style.opacity = opacity;
+                    
+                    if (opacity <= 0) {
+                        clearInterval(fadeInterval);
+                        document.body.removeChild(trail);
+                    }
+                }, 50);
+            }
+            
+            // Start game function
+            startBtn.addEventListener('click', () => {
+                if (gameActive) return;
+                
+                // Reset game
+                score = 0;
+                timeLeft = 30;
+                scoreDisplay.textContent = `Score: ${score}`;
+                timeDisplay.textContent = `Time: ${timeLeft}s`;
+                
+                // Clear any existing targets
+                playground.innerHTML = '';
+                targets = [];
+                
+                gameActive = true;
+                startBtn.textContent = 'Game In Progress';
+                startBtn.disabled = true;
+                
+                // Start timer
+                gameTimer = setInterval(() => {
+                    timeLeft--;
+                    timeDisplay.textContent = `Time: ${timeLeft}s`;
+                    
+                    if (timeLeft <= 0) {
+                        endGame();
+                    }
+                }, 1000);
+                
+                // Create initial targets
+                for (let i = 0; i < 3; i++) {
+                    createTarget();
+                }
+            });
+            
+            // Create a target
+            function createTarget() {
+                const target = document.createElement('div');
+                target.className = 'target';
+                
+                // Random position
+                const maxX = playground.clientWidth - 50;
+                const maxY = playground.clientHeight - 50;
+                const x = Math.floor(Math.random() * maxX);
+                const y = Math.floor(Math.random() * maxY);
+                
+                target.style.left = `${x}px`;
+                target.style.top = `${y}px`;
+                
+                // Random emoji for target
+                const emojis = ['🎯', '⭐', '🔴', '🟢', '🔵', '🟡', '💎', '🍕', '🍔', '🍦', '🍭', '🍬'];
+                target.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                
+                // Add click event
+                target.addEventListener('click', () => {
+                    if (!gameActive) return;
+                    
+                    // Increase score
+                    score++;
+                    scoreDisplay.textContent = `Score: ${score}`;
+                    
+                    // Remove target
+                    playground.removeChild(target);
+                    
+                    // Create a new target
+                    createTarget();
+                });
+                
+                playground.appendChild(target);
+                targets.push(target);
+                
+                // Move target randomly
+                let dirX = Math.random() > 0.5 ? 1 : -1;
+                let dirY = Math.random() > 0.5 ? 1 : -1;
+                let speed = Math.random() * 2 + 1;
+                
+                function moveTarget() {
+                    if (!gameActive) return;
+                    
+                    const rect = target.getBoundingClientRect();
+                    const playRect = playground.getBoundingClientRect();
+                    
+                    // Get current position
+                    let x = parseInt(target.style.left);
+                    let y = parseInt(target.style.top);
+                    
+                    // Update position
+                    x += dirX * speed;
+                    y += dirY * speed;
+                    
+                    // Check boundaries and reverse direction if needed
+                    if (x <= 0 || x >= playRect.width - rect.width) {
+                        dirX *= -1;
+                    }
+                    
+                    if (y <= 0 || y >= playRect.height - rect.height) {
+                        dirY *= -1;
+                    }
+                    
+                    // Apply new position
+                    target.style.left = `${x}px`;
+                    target.style.top = `${y}px`;
+                    
+                    // Continue movement
+                    requestAnimationFrame(moveTarget);
+                }
+                
+                moveTarget();
+            }
+            
+            // End game function
+            function endGame() {
+                gameActive = false;
+                clearInterval(gameTimer);
+                
+                // Clear targets
+                playground.innerHTML = '';
+                targets = [];
+                
+                // Show final score
+                alert(`Game Over! Your final score: ${score}`);
+                
+                // Reset button
+                startBtn.textContent = 'Start Game';
+                startBtn.disabled = false;
+            }
+            
+            // Initialize with random cursor
+            const initialEmoji = cursorEmojis[Math.floor(Math.random() * cursorEmojis.length)];
+            cursorFollower.textContent = initialEmoji;
+            
+            // Warning when leaving
+            window.addEventListener('beforeunload', (e) => {
+                if (gameActive) {
+                    e.preventDefault();
+                    e.returnValue = 'Game in progress! Are you sure you want to leave?';
+                    return e.returnValue;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

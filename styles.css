@@ -60,6 +60,22 @@ header {
     background-color: #9b59b6;
 }
 
+.haunted-link {
+    background-color: #333;
+    animation: haunted-glow 2s infinite alternate;
+    text-decoration: none;
+}
+
+.haunted-link:hover {
+    background-color: #000;
+    transform: scale(1.1) rotate(3deg);
+}
+
+@keyframes haunted-glow {
+    0% { box-shadow: 0 0 5px rgba(255, 0, 0, 0.5); }
+    100% { box-shadow: 0 0 15px rgba(255, 0, 0, 0.8); }
+}
+
 .title {
     font-size: 3.5rem;
     color: #ff4757;

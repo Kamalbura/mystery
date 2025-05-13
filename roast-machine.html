@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Roast Machine</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bungee&family=Comic+Neue:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background: linear-gradient(45deg, #ff5f6d, #ffc371);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            color: #fff;
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        header {
+            padding: 40px 20px;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        
+        h1 {
+            font-family: 'Bungee', cursive;
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            color: #fff;
+            text-shadow: 3px 3px 0px #ff0000, 6px 6px 0px rgba(0, 0, 0, 0.2);
+            letter-spacing: 2px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .roast-machine {
+            background-color: rgba(0, 0, 0, 0.6);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        
+        .roast-display {
+            font-size: 1.8rem;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0 40px;
+            padding: 20px;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            background-color: rgba(0, 0, 0, 0.2);
+            color: #fff;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s;
+        }
+        
+        .roast-display.show-roast {
+            background-color: rgba(255, 100, 100, 0.3);
+            transform: scale(1.05);
+        }
+        
+        .roast-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .control-group label {
+            font-weight: bold;
+            min-width: 120px;
+            text-align: right;
+        }
+        
+        input[type="text"] {
+            flex-grow: 1;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: none;
+            font-family: inherit;
+        }
+        
+        .roast-button {
+            font-family: 'Bungee', cursive;
+            background-color: #ff3838;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 0 #c72c2c, 0 10px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+            top: 0;
+        }
+        
+        .roast-button:hover {
+            background-color: #ff5252;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 0 #c72c2c, 0 12px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .roast-button:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #c72c2c;
+            top: 3px;
+        }
+        
+        .roast-options {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .roast-type {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .roast-type:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+        
+        .roast-type.active {
+            background-color: rgba(255, 0, 0, 0.6);
+            font-weight: bold;
+        }
+        
+        .roast-history {
+            background-color: rgba(0, 0, 0, 0.4);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .roast-history h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #fff;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+        
+        .history-list {
+            max-height: 200px;
+            overflow-y: auto;
+            padding-right: 10px;
+            margin-top: 15px;
+        }
+        
+        .history-item {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .history-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .target-name {
+            font-weight: bold;
+            min-width: 80px;
+        }
+        
+        .back-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: all 0.3s;
+            z-index: 10;
+        }
+        
+        .back-link:hover {
+            background-color: rgba(255, 0, 0, 0.8);
+            transform: scale(1.1);
+        }
+        
+        /* Flames effect at bottom of page */
+        .flames {
+            height: 100px;
+            background-image: url('https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNWRhMjhraTZ3YnQ2cTloZmN3bGw0aThvYWtvc2pwa3Uxb3h3aGZ5YyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/26BRv0ThflsHCqDrG/giphy.gif');
+            background-repeat: repeat-x;
+            background-position: bottom center;
+            background-size: contain;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: -1;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: auto;
+            z-index: 1;
+        }
+        
+        .pop {
+            animation: pop 0.3s;
+        }
+        
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .roast-display {
+                font-size: 1.4rem;
+                min-height: 120px;
+                padding: 15px;
+            }
+            
+            .roast-machine {
+                padding: 20px;
+            }
+            
+            .control-group {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .control-group label {
+                text-align: left;
+                margin-bottom: 5px;
+            }
+            
+            input[type="text"] {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="flames"></div>
+    
+    <a href="index.html" class="back-link">← Back to Fun Zone</a>
+    
+    <header>
+        <h1>🔥 ULTIMATE ROAST MACHINE 🔥</h1>
+        <p class="subtitle">Prepare to get absolutely destroyed with savage roasts!</p>
+    </header>
+    
+    <div class="container">
+        <div class="roast-machine">
+            <div id="roast-text" class="roast-display">
+                Are you ready to get roasted? Enter a name and press the button!
+            </div>
+            
+            <div class="roast-controls">
+                <div class="control-group">
+                    <label for="target-name">Roast Target:</label>
+                    <input type="text" id="target-name" placeholder="Enter your friend's name (optional)">
+                </div>
+                
+                <div class="roast-options">
+                    <button class="roast-type active" data-type="savage">Savage</button>
+                    <button class="roast-type" data-type="friendly">Friendly</button>
+                    <button class="roast-type" data-type="school">School Life</button>
+                    <button class="roast-type" data-type="custom">Add Class Names</button>
+                </div>
+                
+                <button id="get-roast" class="roast-button">🔥 ROAST ME! 🔥</button>
+            </div>
+        </div>
+        
+        <div class="roast-history">
+            <h2>Recent Roasts</h2>
+            <div id="history-list" class="history-list">
+                <!-- Roast history will be added here via JS -->
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Not recommended for those with fragile egos! | &copy; <span id="current-year">2025</span></p>
+    </footer>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set current year
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            
+            // Get DOM elements
+            const roastText = document.getElementById('roast-text');
+            const targetNameInput = document.getElementById('target-name');
+            const getRoastBtn = document.getElementById('get-roast');
+            const roastTypeButtons = document.querySelectorAll('.roast-type');
+            const historyList = document.getElementById('history-list');
+            
+            // Default roast type
+            let selectedRoastType = 'savage';
+            
+            // Roast collections
+            const roasts = {
+                savage: [
+                    "You have something on your face... Oh wait, that's just your face.",
+                    "If I wanted to kill myself, I'd climb your ego and jump to your IQ.",
+                    "You're not completely useless, you can always serve as a bad example.",
+                    "I'd agree with you, but then we'd both be wrong.",
+                    "Don't be ashamed of who you are. That's your parents' job.",
+                    "You're the reason the gene pool needs a lifeguard.",
+                    "Your phone battery lasts longer than your relationships.",
+                    "I thought of you today. It reminded me to take out the trash.",
+                    "You're like a cloud. When you disappear, it's a beautiful day.",
+                    "I'd tell you to go outside and play, but don't trees need oxygen?",
+                    "You have more issues than a magazine stand.",
+                    "Your grades say 'marry rich', but your face says 'study harder'.",
+                    "You must have been born on a highway, because that's where most accidents happen.",
+                    "I'm jealous of people who don't know you.",
+                    "You're not stupid; you just have bad luck thinking."
+                ],
+                friendly: [
+                    "Your IQ is room temperature... in Antarctica.",
+                    "You're so unique, scientists are still trying to figure out what species you are.",
+                    "You're not completely useless, you're pretty good at being a bad example!",
+                    "You have a face only a mother could love... from a distance.",
+                    "If you were a vegetable, you'd be a 'cute-cumber'!",
+                    "You're like a cloud, sometimes bright and fluffy, other times just blocking everyone's sunshine.",
+                    "You're so sweet, sugar would be jealous!",
+                    "Your style is so yesterday, even time travelers avoid it.",
+                    "You're so slow, snails check their watch when they pass you.",
+                    "You look like what happens when lightning strikes a porta-potty."
+                ],
+                school: [
+                    "Your report card has more F's than the alphabet.",
+                    "When teachers see you coming, they call in sick.",
+                    "Your school picture is used as an emergency exit sign.",
+                    "You're the reason teachers need therapy.",
+                    "You're so bad at math, you think calculus is a type of tooth.",
+                    "You're so lazy, you think a five-paragraph essay is a workout.",
+                    "Even Google can't find your intelligence.",
+                    "Your grades are like a limbo stick; they keep getting lower.",
+                    "When the teacher asks for your homework, you say 'my dog ate it'... but you don't have a dog.",
+                    "Your excuses for missing assignments are more creative than the assignments themselves.",
+                    "You're so annoying, even the school Wi-Fi disconnects when you walk in.",
+                    "If ignorance is bliss, you must be the happiest person alive in class.",
+                ],
+                custom: [
+                    "NAME is like a human participation trophy.",
+                    "NAME's brain is running on Internet Explorer.",
+                    "NASA called, they want to study the empty space in NAME's head.",
+                    "If NAME was a spice, they'd be flour.",
+                    "NAME is the human equivalent of a loading screen.",
+                    "NAME's brain is like Internet Explorer. Always slow and frequently doesn't work.",
+                    "NAME's logic is like Windows Vista. Flawed at every level.",
+                    "When God was giving out common sense, NAME thought it was the line for the exit.",
+                    "NAME is so dense, light bends around them.",
+                    "NAME's existence is why aliens haven't visited us yet."
+                ]
+            };
+            
+            // Roast type selection
+            roastTypeButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons
+                    roastTypeButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    button.classList.add('active');
+                    
+                    // Update selected roast type
+                    selectedRoastType = button.dataset.type;
+                });
+            });
+            
+            // Generate roast
+            getRoastBtn.addEventListener('click', () => {
+                // Get target name
+                const targetName = targetNameInput.value.trim() || "You";
+                
+                // Get random roast based on type
+                let randomRoast = roasts[selectedRoastType][Math.floor(Math.random() * roasts[selectedRoastType].length)];
+                
+                // Replace NAME placeholder with target name for custom roasts
+                if (selectedRoastType === 'custom') {
+                    randomRoast = randomRoast.replace(/NAME/g, targetName);
+                }
+                
+                // Update roast text
+                roastText.innerHTML = randomRoast;
+                
+                // Add animation
+                roastText.classList.add('show-roast');
+                roastText.classList.add('pop');
+                setTimeout(() => {
+                    roastText.classList.remove('pop');
+                }, 300);
+                
+                // Add to history
+                addToHistory(targetName, randomRoast);
+                
+                // Extra savage effect - randomly flicker the screen
+                if (Math.random() > 0.7) {
+                    document.body.style.filter = 'invert(100%)';
+                    setTimeout(() => {
+                        document.body.style.filter = '';
+                    }, 100);
+                }
+            });
+            
+            // Add to history
+            function addToHistory(name, roast) {
+                // Create history item
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                
+                const targetSpan = document.createElement('span');
+                targetSpan.className = 'target-name';
+                targetSpan.textContent = name;
+                
+                const roastSpan = document.createElement('span');
+                roastSpan.className = 'history-roast';
+                roastSpan.textContent = roast;
+                
+                historyItem.appendChild(targetSpan);
+                historyItem.appendChild(roastSpan);
+                
+                // Add to history list (prepend to show newest first)
+                if (historyList.firstChild) {
+                    historyList.insertBefore(historyItem, historyList.firstChild);
+                } else {
+                    historyList.appendChild(historyItem);
+                }
+                
+                // Limit to 5 history items
+                if (historyList.children.length > 5) {
+                    historyList.removeChild(historyList.lastChild);
+                }
+            }
+            
+            // Easter egg - pressing Shift key 5 times makes everything shake
+            let shiftCount = 0;
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Shift') {
+                    shiftCount++;
+                    if (shiftCount === 5) {
+                        shiftCount = 0;
+                        
+                        // Make everything shake
+                        document.querySelectorAll('div, h1, h2, p').forEach(el => {
+                            el.style.animation = 'shake 0.5s infinite';
+                        });
+                        
+                        // Stop after 2 seconds
+                        setTimeout(() => {
+                            document.querySelectorAll('div, h1, h2, p').forEach(el => {
+                                el.style.animation = '';
+                            });
+                        }, 2000);
+                    }
+                }
+            });
+            
+            // Reset shift count after 2 seconds of no shift key
+            document.addEventListener('keyup', (e) => {
+                if (e.key === 'Shift') {
+                    setTimeout(() => {
+                        shiftCount = 0;
+                    }, 2000);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
